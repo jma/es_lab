@@ -1,0 +1,19 @@
+-e git+https://github.com/jma/es_lab.git@07ebf4a6423e662c4f33a51e0675a5136e06590a#egg=Elasticsearch_Lab-master
+Flask==0.10.1
+Flask-Assets==0.9
+Jinja2==2.7.2
+MarkupSafe==0.21
+Werkzeug==0.9.4
+gnureadline==6.3.3
+honcho==0.5.0
+ipython==2.0.0
+itsdangerous==0.24
+pycountry==1.6
+pyelasticsearch==0.6.1
+pymarc==2.9.2
+requests==2.2.1
+simplejson==3.4.0
+six==1.6.1
+urllib3==1.8.2
+webassets==0.9
+wsgiref==0.1.2

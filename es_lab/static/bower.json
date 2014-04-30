@@ -1,0 +1,25 @@
+{
+  "name": "es_lab",
+  "version": "0.0.0",
+  "authors": [
+    "Johnny Mariéthoz <Johnny.Mariethoz@rero.ch>"
+  ],
+  "description": "Js dependencies for es_lab",
+  "keywords": [
+    "HEG",
+    "lab"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.16",
+    "bootstrap": "~3.1.1"
+  }
+}

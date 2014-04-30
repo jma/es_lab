@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+		<title>Elasticsearch Lab</title>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="copyright" content="Johnny Mariethoz - 2014" />
+		<meta name="author" content="Johnny Mariéthoz">
+    	<meta name="description" content="Simple ES search interface for numeric library">
+    	<link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+		{% assets "css_all" %}
+		<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}" media="all" />
+		{% endassets %}
+		{% assets "js_jquery" %}
+		<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+		{% endassets %}
+  </head>
+
+  <body>
+
+      <!-- Jumbotron -->
+	  <div class="jumbotron">
+		  <h1>Elasticsearch Lab</h1>
+	  </div>
+    <div class="container">
+
+	{% block body %}{% endblock %}
+
+      <!-- Site footer -->
+	<footer>
+      <div class="footer">
+        <p>&copy; RERO 2014</p>
+      </div>
+	</footer>
+
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+		{% assets "js_all" %}
+		<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+		{% endassets %}
+<script>
+$(function() {
+    $('.truncated')
+		.hide()                       // Hide the text initially
+    	.after('<span class="glyphicon glyphicon-plus-sign"></span>') // Create toggle button
+    	.next().on('click', function(){          // Attach behavior
+        $(this).toggleClass('glyphicon-minus-sign')   // Swap the icon
+            .prev().toggle();                    // Hide/show the text
+    });
+});
+</script>
+	{% block custom_js %}{% endblock %}
+    <!-- Placed at the end of the document so the pages load faster -->
+  </body>
+</html>

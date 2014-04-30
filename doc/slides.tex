@@ -1,0 +1,385 @@
+\documentclass[hangout]{beamer}
+%\documentclass[compress]{beamer}
+
+\usepackage[utf8]{inputenc} 
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage[french]{babel}
+
+\usetheme{Warsaw}
+
+\title[ES lab]{Cours elasticsearch} 
+\author{Johnny Mari\'ethoz} 
+\institute{RERO}
+\logo{\includegraphics[width=0.15\textwidth]{img/logo_rero}}
+\lstset{language=Python}
+
+
+\lstdefinestyle{custompython}{
+  language=Python,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+\lstset{style=custompython}
+
+\date[Genève 2014]{Cours HESGE} 
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{Table des matières I}
+	\tableofcontents[part=1]
+	\tableofcontents[part=2]
+\end{frame}
+\begin{frame}{Table des matières II}
+	\tableofcontents[part=3]
+	\tableofcontents[part=4]
+\end{frame}
+
+\part{1}
+\begin{frame}{Moteurs de recherche}
+	\tableofcontents[part=1]
+\end{frame}
+\section{Moteurs de recherche: la partie visible}
+
+\begin{frame}
+	\begin{block}{Interface utilisateur}
+	\begin{itemize}
+	    \item \structure{Champ de recherche} entrée du texte de recherche
+	    \item \structure{Facettes} fréquence d'un \alert{terme}
+	    \item \structure{Filtres} \alert{réduit} la liste des résultats (click sur les facettes)
+	    \item \structure{Tris} ordonnancement des résultats
+	    	\begin{itemize}
+	    		\item par titre
+	    		\item par auteur
+	    		\item par \alert{pertinence}
+	    		\item par date de publication
+	    	\end{itemize}
+	    \item \structure{Scoring} pondération des champs pour le tris par pertinence
+	    \item \structure{Pagination} nombre de résultats par page
+	\end{itemize}
+	
+	\end{block}
+\end{frame}
+
+
+\part{2}
+\section{Théorie: Information Retrieval}
+\begin{frame}{Théorie: Information Retrieval}
+	\tableofcontents[part=2]
+\end{frame}
+
+\frame{
+	\begin{block}<1->{Définition}
+\begin{quote}
+	La recherche d'information (RI1) est le domaine qui étudie la manière de
+	\alert{retrouver des informations} dans un \alert{corpus}. [Wikipédia]
+\end{quote}
+\end{block}
+	}
+
+\subsection{Deux étapes}
+\frame{
+	\begin{block}<1->{Indexation}
+		\begin{itemize}
+			\item création d'un \alert{index de descripteurs}
+			\item lors de l'ajout d'un document
+			\item peut \alert{prendre du temps} (machine)
+		\end{itemize}
+	\end{block}
+	\begin{block}<2->{Recherche}
+		\begin{itemize}
+			\item comparaison d'une \alert{requête} avec un lot de \alert{documents}
+			\item doit être \alert{rapide}
+		\end{itemize}
+	\end{block}
+}
+
+\subsection{Principes}
+\frame{
+	\begin{block}<1->{Comment ça marche?}
+Produit interne (Inner product):
+$$
+	\bordermatrix{
+	&\mathbf{q}&\cr
+    \mathbf{term_1}& 1      \cr
+    \mathbf{term_2}& 0      \cr
+    \mathbf{\vdots}& \vdots \cr
+    \mathbf{term_n}& 0      
+	}
+\cdot
+	\bordermatrix{
+	&\mathbf{d_1}&\mathbf{d_2}&\ldots &\mathbf{d_n}\cr
+        & 1      &  0     & \ldots & 0 \cr
+        & 0      &  1     & \ldots & 0 \cr
+        & \vdots & \vdots & \ddots & \vdots\cr
+        & 0      &  0     &\ldots  & 0
+	}
+$$
+
+\structure{Note}: dans la vraie vie les vecteurs sont sparses et on ajoute des
+poids: \url{http://en.wikipedia.org/wiki/Vector_space_model}
+	\end{block}
+}
+
+\frame{
+	%\frametitle{Aim}
+	\begin{block}<1->{Principe de génération des descripteurs (termes)}
+		\begin{itemize}
+			\item pré-traitements
+				\begin{itemize}
+					\item \alert{stemming}: racinisation ou désuffixation
+					\item \alert{tokenization}: décomposition en mots
+				\end{itemize}
+			\item extraction des descripteurs sous forme de vecteur d'entiers de la taille du nombre de descripteurs
+			\item rajout de règles empiriques, recherche n-gram, synonymes, etc.
+			\item un temps de réponse faible => optimisation + vecteur sparse (Lucene)
+		\end{itemize}
+	\end{block}
+}
+
+\subsection{Mesures}
+\frame{
+	%\frametitle{Aim}
+	\begin{block}<1->{Mesures de performance}
+		\begin{itemize}
+			\item "precision and recall"
+				\begin{itemize}
+					\item on fixe un nombre de résultat (par ex. 10) et on \alert{compte} le nombre de résultats pertinents
+				\end{itemize}
+			\item demande des données \alert{annotées}
+		\end{itemize}
+	\end{block}
+}
+
+
+\subsection{Limitations}
+\frame{
+	%\frametitle{Aim}
+	\begin{block}<1->{Limitations}
+		\begin{itemize}
+			\item des avions: stop word
+			\item pain (boulangerie), pain(english)
+			\item thé - the
+			\item \alert{qualité} des données
+		\end{itemize}
+	\end{block}
+}
+
+\part{3}
+\begin{frame}{Elasticsearch}
+	\tableofcontents[part=3]
+\end{frame}
+\section{Elasticsearch}
+
+\subsection{Concepts}
+\frame{
+	%\frametitle{Aim}
+	\begin{block}{Concepts similaires à SQL}
+		\begin{description}
+			\item[index] base de donnée
+			\item[document type] table
+			\item[document] ligne d'une table
+			\item[term] colonne
+		\end{description}
+	\end{block}
+}
+
+\subsection{"Analyzer" et "Mapping"}
+\begin{frame}[fragile]
+	%\frametitle{Aim}
+	\begin{block}{Configuration de l'index (avant indexation)}
+		\begin{lstlisting}
+{
+    "analyzer" : {
+        "custom_analyzer" : {
+            "tokenizer" : "keyword",
+            "filter" : ["standard", "asciifolding", 
+                        "lowercase"]
+        }
+    }
+}
+		\end{lstlisting}
+	\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+	%\frametitle{Aim}
+	\begin{block}{Mapping (avant indexation)}
+		Ajout de connaissances "a priori"
+		\begin{lstlisting}
+ "language" : {
+     "type": "string",
+     "index": "not_analyzed"
+ }
+		\end{lstlisting}
+		\begin{itemize}
+			\item type de données (integer, string, etc.)
+			\item "index": "not\_analyzed" == "analyzer":"keyword"
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+	%\frametitle{Aim}
+	\begin{block}{Mapping complèxe}
+		\begin{lstlisting}
+ "authors" : {
+     "properties" : {
+         "other_authors": {
+             "type": "string",
+             "fields" : {
+                 "other_authors": {
+                     "copy_to" : ["facet_authors"],
+                     "type": "string",
+                     "analyzer": "simple"
+                 } } } } 
+},
+ "facet_authors" : {
+     "type" : "string",
+     "index": "not_analyzed"
+ }
+		\end{lstlisting}
+	\end{block}
+\end{frame}
+
+\subsection{Query}
+\begin{frame}[fragile]
+	%\frametitle{Aim}
+	\begin{block}<1->{Structure d'une requête}
+			\begin{lstlisting}
+{
+    "size": 20,
+    "from": 0,
+    "query": {
+        "filtered": {
+            "query": {},
+            "filter": {}
+        } 
+    },
+    "aggs": {},
+    "highlight": {},
+    "sort": []
+}
+			\end{lstlisting}
+	\end{block}
+\end{frame}
+
+
+\subsection{Facettes et filtres}
+\begin{frame}[fragile]
+	%\frametitle{Aim}
+	\begin{block}{Facets / aggregators (lors de la recherche)}
+		\begin{lstlisting}
+"aggs": {
+    "language": {
+        "terms": {
+            "field": "language",
+            "size": 10,
+            "order": {
+                "_count": "desc"
+            }
+        }
+    }
+}
+		\end{lstlisting}
+		\begin{itemize}
+			\item auteurs, type de documents, etc.
+			\item approximation du nombre d'occurrences
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\frame{
+	%\frametitle{Aim}
+	\begin{block}<1->{Filtres (recherche)}
+		\begin{itemize}
+			\item comme une requête \alert{booléenne}
+			\item plus \alert{rapide} que "query"
+			\item utilisé par les facettes
+		\end{itemize}
+	\end{block}
+}
+
+\subsection{Query\_string}
+\begin{frame}[fragile]
+	%\frametitle{Aim}
+	\begin{block}<1->{Requête utilisateur (texte de recherche)}
+		\begin{itemize}
+			\item Lucene query (support de title:)
+			\item boosting (pondération des termes, par ex. un titre a plus de poids qu'une note)
+		\begin{lstlisting}
+"query_string": {
+    "fields" : ["title.title^4", 
+                "title.subtitle^2",
+                "abstract"],
+    "query": user_query
+}
+		\end{lstlisting}
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\subsection{Autres}
+\frame{
+	%\frametitle{Aim}
+	\begin{block}<1->{"Highlights" (recherche)}
+		\begin{itemize}
+			\item \alert{mise en évidence} du descripteur correspondant à la recherche
+			\item supporte le \alert{"stemming"}
+		\end{itemize}
+	\end{block}
+}
+
+\begin{frame}[fragile]
+	%\frametitle{Aim}
+	\begin{block}<1->{Tris (recherche)}
+		\begin{itemize}
+			\item tris par terme ou par \alert{pertinence} (valeur par défaut)
+		\begin{lstlisting}
+"sort" : [
+    { 
+	    "title.title" : {
+            "order" : "asc"
+        }
+    }
+]
+		\end{lstlisting}
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\part{4}
+\begin{frame}{En pratique}
+	\tableofcontents[part=4]
+\end{frame}
+\section{En pratique}
+\frame{
+	%\frametitle{Aim}
+	\begin{block}<1->{Outil: \alert{"es\_lab"}}
+		\begin{itemize}
+			\item utilisation de l'extension "sense"
+			\item basé sur \alert{python}-Flask
+			\item conversion des données MarcXML en \alert{JSON}
+			\item script d'indexation
+			\item configuration des indexes et des termes
+				\begin{itemize}
+					\item marc2json
+					\item facettes
+					\item highlight
+					\item mapping
+				\end{itemize}
+			\item interface utilisateur (page web)
+		\end{itemize}
+	\end{block}
+}
+
+\end{document}
