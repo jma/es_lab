@@ -23,13 +23,32 @@
 </div>
 
 <div class="row">
-    <div class="col-md-4">
-        <h2>{{ results.total }} results</h2>
+    <div class="col-md-3">
+          {%- set args = request.args.copy() -%}
+          {%- do args.setdefault("rg", 10) -%}
+          {%- do args.setdefault("jrec", 0) -%}
+          {%- set n = args.get("rg")|int + args.get("jrec")|int -%}
+        <h2>{{ n }} / {{ results.total }} results</h2>
     </div>
 
-    <div class="col-md-8">
-        <ul class="pager">
-          <li class="previous disabled"><a href="#">&larr;</a></li>
+    <div class="col-md-5">
+        <ul class="pagination">
+          {%- set args = request.args.copy() -%}
+          {%- do args.setdefault("rg", 10) -%}
+          {%- do args.setdefault("jrec", 0) -%}
+          {%- set rg = args.get("rg", 10)|int -%}
+          {%- set jrec = args.get("jrec", 0)|int -%}
+		  {%- if (jrec - rg) >= 0 -%}
+          {%- set jrec = jrec - 10 -%}
+		  {%- if jrec < 0 -%}
+		  {%- set jrec = 0 -%}
+          {%- endif -%}
+          {%- do args.pop("jrec") -%}
+          {%- do args.update({"jrec": jrec|string()}) -%}
+          <li class="previous"><a title="previous" href="{{ url_for('search', **args)}}">&lang;</a></li>
+          {%- else -%}
+          <li class="previous disabled"><a title="previous" href="#">&lang;</a></li>
+          {%- endif -%}
           {%- set args = request.args.copy() -%}
           {%- do args.setdefault("rg", 10) -%}
           {%- do args.setdefault("jrec", 0) -%}
@@ -39,12 +58,37 @@
           {%- set jrec = jrec + 10 -%}
           {%- do args.pop("jrec") -%}
           {%- do args.update({"jrec": jrec|string()}) -%}
-          <li class="next"><a href="{{ url_for('search', **args)}}">&rarr;</a></li>
+          <li class="next"><a title="next" href="{{ url_for('search', **args)}}">&rang;</a></li>
           {%- else -%}
-          <li class="next disabled"><a href="#">&rarr;</a></li>
+          <li class="next disabled"><a href="#" title="next">&rang;</a></li>
           {%- endif -%}
     </ul>
     
+    </div>
+    <div class="col-md-4">
+<!-- Split button -->
+<div class="btn-group pull-right" style="margin:20px 0;">
+  <button type="button" class="btn btn-default">Sort</button>
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    <span class="caret"></span>
+    <span class="sr-only">Toggle Dropdown</span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    {%- set args = request.args.copy() -%}
+    {%- do args.setdefault("sf", "") -%}
+	{%- if  args.get("sf", "") == "sort_title" -%}
+	{%- do args.pop("sf") -%}
+    {%- do args.update({"sf": ""}) -%}
+    {%- do args.update({"so": "d"}) -%}
+    <li><a href="{{ url_for('search', **args)}}">Relevance</a></li>
+    {%- else -%}
+	{%- do args.pop("sf") -%}
+    {%- do args.update({"sf": "sort_title"}) -%}
+    {%- do args.update({"so": "a"}) -%}
+    <li><a href="{{ url_for('search', **args)}}">Title</a></li>
+    {%- endif -%}
+  </ul>
+</div>
     </div>
 </div>
 
