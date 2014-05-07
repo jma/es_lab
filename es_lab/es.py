@@ -230,11 +230,11 @@ class ElasticSearch(object):
         es_query.update(sort_options)
 
         # facet configuration
-        from es_config import get_facets_config, get_hilights_config
+        from es_config import get_facets_config, get_highlights_config
         es_query.update(get_facets_config())
 
         # hightlight configuration
-        es_query.update(get_hilights_config())
+        es_query.update(get_highlights_config())
 
         results = self.process_results(self.connection.search(es_query,
                                        index=index,

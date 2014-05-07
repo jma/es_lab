@@ -93,7 +93,7 @@ def get_facets_config():
     }
 
 
-def get_hilights_config():
+def get_highlights_config():
     """
     Doc:
         http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-request-highlighting.html#_postings_highlighter

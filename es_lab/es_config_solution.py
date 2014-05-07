@@ -122,7 +122,7 @@ def get_facets_config():
     }
 
 
-def get_hilights_config():
+def get_highlights_config():
     return {
         "highlight": {
             "fields": {
