@@ -33,7 +33,7 @@ def marc2json(fields):
                 document_type,
                 institution
 
-    Note: pour vusualiser le json:
+    Note: pour visualiser le json:
         python es_lab/records.py data/data.xml
         ou
         http://localhost:5000/record/<recid>, par ex:
@@ -119,7 +119,7 @@ def get_analysis_config():
     """ Quelques analyzer custom.
 
     Ici sont pré-définis les analyzer dont vous aurez besoin dans le mapping.
-    Ceux définits par défaut peuvent être vu ici:
+    Ceux définis par défaut peuvent être vu ici:
     http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/analysis-intro.html
 
     Doc:
@@ -232,7 +232,7 @@ def get_mapping_config():
             "ma super phrase de test"
           }
     Tests:
-        vous pouvez tester à tous moment en indexant les documents:
+        vous pouvez tester à tout moment en indexant les documents:
         python es_lab/es.py data/data.xml
     Astuce:
         il est important de bien définir le mapping en particulier pour les
