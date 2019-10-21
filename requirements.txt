@@ -3,7 +3,7 @@ Flask==0.10.1
 Flask-Assets==0.9
 Jinja2==2.7.2
 MarkupSafe==0.21
-Werkzeug==0.9.4
+Werkzeug==0.15.3
 gnureadline==6.3.3
 honcho==0.5.0
 ipython==2.0.0
