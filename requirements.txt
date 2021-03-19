@@ -1,7 +1,7 @@
 -e git+https://github.com/jma/es_lab.git@07ebf4a6423e662c4f33a51e0675a5136e06590a#egg=Elasticsearch_Lab-master
 Flask==0.10.1
 Flask-Assets==0.9
-Jinja2==2.7.2
+Jinja2==2.11.3
 MarkupSafe==0.21
 Werkzeug==0.9.4
 gnureadline==6.3.3
