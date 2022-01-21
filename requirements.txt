@@ -6,7 +6,7 @@ MarkupSafe==0.21
 Werkzeug==0.9.4
 gnureadline==6.3.3
 honcho==0.5.0
-ipython==2.0.0
+ipython==7.16.3
 itsdangerous==0.24
 pycountry==1.6
 pyelasticsearch==0.6.1
