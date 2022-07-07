@@ -11,7 +11,7 @@ itsdangerous==0.24
 pycountry==1.6
 pyelasticsearch==0.6.1
 pymarc==2.9.2
-requests==2.2.1
+requests==2.20.0
 simplejson==3.4.0
 six==1.6.1
 urllib3==1.8.2
